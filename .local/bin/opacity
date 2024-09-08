@@ -1,0 +1,51 @@
+#!/bin/sh
+
+# A script for setting the opacity of the current alacritty instance
+
+alacritty_pid=$(hyprctl activewindow | grep '^\spid:' | awk '{print $2}')
+
+change_opacity() {
+  step=0.2
+  min=0.0
+  max=1.0
+
+  # Check increment or decrement
+  if [ "$1" = "+" ]; then
+    new_opacity=$(echo "$opacity + $step" | bc | awk '{printf "%.1f\n", $1}')
+  else
+    new_opacity=$(echo "$opacity - $step" | bc | awk '{printf "%.1f\n", $1}')
+  fi
+
+  [ "$(echo "$new_opacity > $max" | bc)" -eq 1 ] && new_opacity=0.0 # Reset to min if over max opacity
+  [ "$(echo "$new_opacity < $min" | bc)" -eq 1 ] && new_opacity=1.0 # Reset to max if under min opacity
+}
+
+[ ! -f "$XDG_CONFIG_HOME/alacritty/alacritty.toml" ] &&
+  notify-send "alacritty.toml does not exist" && exit 0
+
+# Check if the opacity file already exists
+if [ -f "/tmp/alacritty_opacity_$alacritty_pid" ]; then
+  opacity="$(cat "/tmp/alacritty_opacity_$alacritty_pid")" # Get opacity from instance
+
+  change_opacity "$1" # Change the opacity
+
+  alacritty msg config window.opacity="$new_opacity" && # Change and save the opacity
+    echo "$new_opacity" >"/tmp/alacritty_opacity_$alacritty_pid"
+
+  exit 0 # Exit successfully
+else
+  # Get opacity from config
+  opacity=$(awk '/^opacity / {print $3}' "$XDG_CONFIG_HOME/alacritty/alacritty.toml")
+
+  # Set new opacity
+  change_opacity "$1" # Check if adding or removing
+
+  alacritty msg config window.opacity="$new_opacity" && # Change and save the opacity
+    echo "$new_opacity" >"/tmp/alacritty_opacity_$alacritty_pid"
+
+  (
+    waitpid "$alacritty_pid" # Wait for process to terminate so we can clean up the opacity file
+    rm -f "/tmp/alacritty_opacity_$alacritty_pid"
+  ) &
+
+fi
