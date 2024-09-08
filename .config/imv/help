@@ -1,0 +1,27 @@
+Keybinds:
+
+- Image Navigation:
+n,p - Next/Prev
+gg,<Shift+G> - Goto First/Last
+
+- Zooming:
+<Shift+plus>,<minus> - Zoom In/Out
+
+- Rotate:
+<Ctrl+r> - Rotate By 90
+
+- Slideshow:
+t,<Shift+T> - Toggle Slideshow
+
+- Gif playback:
+<period> = next_frame
+<space> = toggle_playing
+
+- Other
+q - Quit
+x - Close
+f - Toggle Fullscreen
+d - Display Overlay
+c - Recenter Image
+r - Reset View
+s - Scaling Next
