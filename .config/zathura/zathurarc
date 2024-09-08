@@ -1,0 +1,9 @@
+set selection-clipboard clipboard
+set highlight-color "#000000"
+set highlight-fg "#f7d702"
+map J zoom out
+map K zoom in
+map u scroll half-up
+map d scroll half-down
+map D toggle_page_mode
+map ` mark_evaluate
