@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# A script for setting a random wallpaper using swaybg
+
+wallpaper_dir="${HOME}/Pictures/wallpapers"
+
+swaybg -i "$(find "$wallpaper_dir" -type f ! -path '*/.*' | shuf -n1)" & # Set random wallpaper
+
+while true; do
+  # sleep 10 # Sleep 10 minutes before setting new wallpaper
+  sleep 600 # Sleep 10 minutes before setting new wallpaper
+
+  swaybg -i "$(find "$wallpaper_dir" -type f ! -path '*/.*' | shuf -n1)" & # Set a new random wallpaper
+
+  sleep 1                         # Sleep 1 sec for smooth transition
+  pkill -o swaybg >/dev/null 2>&1 # Kill previous instance
+done
