@@ -1,0 +1,17 @@
+return {
+  "nvim-telescope/telescope.nvim",
+  opts = {
+    defaults = {
+      mappings = {
+        i = {
+          ["<C-j>"] = require("telescope.actions").move_selection_next,
+          ["<C-k>"] = require("telescope.actions").move_selection_previous,
+          ["<C-h>"] = require("telescope.actions").preview_scrolling_left,
+          ["<C-l>"] = require("telescope.actions").preview_scrolling_right,
+          ["<C-u>"] = require("telescope.actions").preview_scrolling_up,
+          ["<C-d>"] = require("telescope.actions").preview_scrolling_down,
+        },
+      },
+    },
+  },
+}
