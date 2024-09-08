@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# Use sudo for commands
+for command in mount umount sv pacman updatedb su shutdown poweroff reboot; do
+  # shellcheck disable=SC2139
+  alias $command="sudo $command"
+done
+unset command
+
+# Use verbosity
+alias \
+  cp="cp -iv" \
+  mv="mv -iv" \
+  rm="rm -vI" \
+  mkd="mkdir -pv"
+
+# Use colors
+alias \
+  ls="ls -hN --color=auto --group-directories-first" \
+  grep="grep --color=auto" \
+  diff="diff --color=auto" \
+  ip="ip -color=auto"
+
+# Shortcuts
+alias \
+  l.="ls -dl .*" \
+  lsa="ls -lah" \
+  c.="cd ~/.config"
+
+# Shorten common commands
+alias \
+  g="git" \
+  v="nvim" \
+  z="zathura" \
+  p="pacman" \
+  o="xdg-open"
+
+# Easy navigation
+alias \
+  ..="cd .." \
+  2..="cd ../.." \
+  3..="cd ../../.." \
+  4..="cd ../../../.." \
+  5..="cd ../../../../.." \
+  6..="cd ../../../../../.."
+
+# Docker
+alias \
+  dpsa="docker ps -a" \
+  dils="docker image ls" \
+  dnls="docker network ls" \
+  dvls="docker volume ls" \
+  dipr="docker image prune" \
+  dspr="docker system prune" \
+  dlf="docker logs --follow" \
+  drm="docker rm" \
+  dirm="docker image rm" \
+  dins="docker inspect"
+
+# Other useful aliases
+alias \
+  glog='git log --graph --decorate --oneline $(git rev-list -g --all)' \
+  dots='git --git-dir=$HOME/.dots/ --work-tree=$HOME' \
+  lzd="lazydocker" \
+  vimdiff="nvim -d" \
+  vim="nvim" \
+  paths='echo -e ${PATH//:/"\n"}' \
+  get="curl -O -L" \
+  follow='tail -F -n 100'
+
+command -v bat >/dev/null 2>&1 &&
+  alias cat="bat --style=plain"
+
+command -v eza >/dev/null 2>&1 &&
+  alias ls="eza -h --color=always --group-directories-first --color-scale=age --icons=auto"

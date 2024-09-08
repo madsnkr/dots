@@ -1,0 +1,41 @@
+#!/bin/sh
+
+# Paths
+export AZURE_CLI_VENV="$HOME/azure-cli-venv"
+export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="$PATH:$HOME/.local/bin:$AZURE_CLI_VENV/bin:$DOTNET_ROOT:$DOTNET_ROOT/tools"
+
+# Dark theme
+export GTK_THEME="Adwaita:dark"
+export GTK2_RC_FILES=/usr/share/themes/Adwaita-dark/gtk-2.0/gtkrc
+export QT_STYLE_OVERRIDE=Adwaita-Dark
+
+# XDG DIRS
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
+export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
+
+# Other
+export EDITOR="nvim"                              # Set nvim as editor
+export BROWSER="firefox"                          # Set browser for programs using browser
+export ELECTRON_OZONE_PLATFORM_HINT=auto          # Select wayland backend if possible
+export DIFFPROG="nvim -d $1"                      # Override default vim -d merge
+export VIRSH_DEFAULT_CONNECT_URI="qemu:///system" # Connect to system by default
+
+# Start Hyprland on tty if not running
+if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
+  # Prevent multiple instances
+  killall pipewire 2>/dev/null
+  killall pipewire-pulse 2>/dev/null
+  killall wireplumber 2>/dev/null
+
+  pipewire 2>"/tmp/pipewire-$(date +%F-%R).log" &
+  pipewire-pulse 2>"/tmp/pipewire-pulse-$(date +%F-%R).log" &
+  wireplumber 2>"/tmp/wireplumber-$(date +%F-%R).log" &
+  exec dbus-run-session -- ssh-agent Hyprland >"/tmp/hyprland-$(date +%F-%R).log" 2>&1
+fi
