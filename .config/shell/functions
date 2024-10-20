@@ -1,0 +1,53 @@
+#!/bin/bash
+
+dutop() {
+  local fp="/"
+  local amount=20
+
+  # Parse options
+  while getopts ":p:n:h" opt; do
+    case $opt in
+    p) fp="$OPTARG" ;;
+    n) amount="$OPTARG" ;;
+    h)
+      echo "Description: List items taking up the most disk space."
+      echo "Usage: dutop [-p path] [-n amount]"
+      return 0
+      ;;
+    \?)
+      echo "Invalid option -$OPTARG" >&2
+      return 1
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      return 1
+      ;;
+    esac
+  done
+
+  if [ ! -d "$fp" ]; then
+    echo "'$fp' is not a valid directory."
+    return 1
+  fi
+
+  if ! [[ "$amount" =~ ^[0-9]+$ ]]; then
+    echo "'$amount' is not a valid number."
+    return 1
+  fi
+
+  sudo du -hax "$fp" | sort -rh | head -n"$amount"
+}
+
+lsxp() {
+  local explicit=$(mktemp)
+  local aur=$(mktemp)
+
+  sudo pacman -Qqe | sort >"$explicit"
+  sudo pacman -Qqm | sort >"$aur"
+
+  # Compare and output the result
+  comm -23 "$explicit" "$aur"
+
+  # Clean up temporary files
+  rm "$explicit" "$aur"
+}
