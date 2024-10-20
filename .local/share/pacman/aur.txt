@@ -1,0 +1,5 @@
+adwaita-qt5-git
+adwaita-qt6-git
+downgrade
+visual-studio-code-bin
+yay
