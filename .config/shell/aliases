@@ -25,7 +25,8 @@ alias \
 alias \
   l.="ls -dl .*" \
   lsa="ls -lah" \
-  c.="cd ~/.config"
+  c.="cd ~/.config" \
+  alias chmox='chmod +x'
 
 # Shorten common commands
 alias \
@@ -33,7 +34,8 @@ alias \
   v="nvim" \
   z="zathura" \
   p="pacman" \
-  o="xdg-open"
+  o="xdg-open" \
+  t="tmux"
 
 # Easy navigation
 alias \
@@ -55,7 +57,8 @@ alias \
   dlf="docker logs --follow" \
   drm="docker rm" \
   dirm="docker image rm" \
-  dins="docker inspect"
+  dins="docker inspect" \
+  ds="docker stop"
 
 # Other useful aliases
 alias \
