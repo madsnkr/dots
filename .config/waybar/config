@@ -1,96 +1,84 @@
 {
   "layer": "top",
   "modules-left": [
-    "custom/launcher",
-    "cpu",
-    "memory",
-    "network"
-  ],
-  "modules-center": [
     "hyprland/workspaces"
   ],
+  "modules-center": [],
   "modules-right": [
-    "custom/updates",
-    "custom/wallpaper",
-    "pulseaudio",
-    "clock",
-    "battery",
-    "custom/power"
+    "group/control",
+    "group/hardware",
+    "clock"
   ],
-  "pulseaudio": {
-    "tooltip": false,
-    "scroll-step": 5,
-    "format": "{icon} {volume}%",
-    "format-muted": "{icon} {volume}%",
-    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-    "format-icons": {
-      "default": [
-        "",
-        "",
-        ""
-      ]
-    }
-  },
   "hyprland/workspaces": {
-    "persistent-workspaces": {
-      "*": 6
+    // "persistent-workspaces": {
+    //   "*": 5 // 5 workspaces by default on every monitor
+    // },
+    "format": "{icon}",
+    "tooltip": false,
+    "all-outputs": true,
+    "format-icons": {
+      "active": "",
+      "default": ""
     }
   },
-  "network": {
-    "tooltip": false,
-    "format-wifi": "  {essid}",
-    "format-ethernet": ""
-  },
-  "backlight": {
-    "tooltip": false,
-    "format": " {}%",
-    "interval": 1,
-    "on-scroll-up": "light -A 5",
-    "on-scroll-down": "light -U 5"
+  "clock": {
+    "format": "{:%a %b %d %R %p }"
   },
   "battery": {
     "states": {
-      "good": 95,
       "warning": 30,
-      "critical": 20
+      "critical": 15
     },
-    "format": "{icon}  {capacity}%",
-    "format-charging": " {capacity}%",
+    "format": "{icon} {capacity}%",
+    "format-charging": "󱐋 {capacity}%",
     "format-plugged": " {capacity}%",
-    "format-alt": "{time} {icon}",
+    "tooltip-format": "{time} left",
     "format-icons": [
-      "",
-      "",
-      "",
-      "",
-      ""
+      "󰁺",
+      "󰁼",
+      "󰁾",
+      "󰂁",
+      "󰁹"
     ]
   },
-  "clock": {
-    "format": " {:%I:%M %p  󰃭 %d/%m/%Y}"
-  },
   "cpu": {
-    "interval": 15,
-    "format": " {}%",
-    "max-length": 10
+    "format": " {usage}%"
   },
   "memory": {
-    "interval": 30,
-    "format": " {}%",
-    "max-length": 10
+    "format": " {used:.2g}G"
   },
-  "custom/launcher": {
-    "format": " ",
-    "on-click": "fuzzel",
-    "on-click-right": "killall fuzzel"
+  "temperature": {
+    "thermal-zone": 1,
+    "format": " {temperatureC}°C"
   },
-  "custom/power": {
-    "format": " ",
-    "on-click": "bash ~/.config/waybar/scripts/power_menu.sh"
+  "network": {
+    "format-icons": [
+      "󰤯",
+      "󰤟",
+      "󰤢",
+      "󰤥",
+      "󰤨"
+    ],
+    "interval": 2,
+    "format-alt-click": "click-right",
+    "format-wifi": "{icon} {bandwidthDownBytes}",
+    "format-ethernet": " {bandwidthDownBytes}",
+    "format-disconnected": "",
+    "tooltip-format": "{essid}\n{ipaddr}"
   },
-  "custom/updates": {
-    "exec": "~/.config/waybar/scripts/updates.sh",
-    "interval": 600,
-    "on-click": "alacritty -e yay -Syu && notify-send 'The system has been updated' "
+  "group/hardware": {
+    "orientation": "horizontal",
+    "modules": [
+      "cpu",
+      "memory",
+      "battery",
+      "temperature"
+    ]
+  },
+  "group/control": {
+    "orientation": "horizontal",
+    "modules": [
+      "network"
+    ]
   }
 }
