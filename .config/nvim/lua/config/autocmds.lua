@@ -37,3 +37,8 @@ vim.api.nvim_create_autocmd({ "InsertEnter", "WinLeave" }, {
     end
   end,
 })
+-- this fixes the loading of terraformls and tflint
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+  pattern = "*.tf",
+  command = "set filetype=terraform",
+})
