@@ -1,0 +1,37 @@
+#!/bin/bash
+
+ws_count=2
+native_out="eDP-1"
+
+all_out=$(hyprctl monitors | grep "Monitor" | awk '{print $2}')
+ext_out=$(echo "$all_out" | grep -v "$native_out")
+
+dispatch_ws() {
+  out="$1"      # Output to assign workspace to
+  ws_count="$2" # Workspaces per output
+  ws_num="$3"   # The current workspace to assign to output
+
+  i=0
+  while [ "$i" -lt "$ws_count" ]; do
+    hyprctl dispatch moveworkspacetomonitor "$ws_num" "$out" >/dev/null
+    ws_num=$((ws_num + 1))
+    i=$((i + 1))
+  done
+  echo "$ws_num"
+}
+
+# Check if multi monitor
+if [ -n "$ext_out" ]; then
+  ws_num=1
+  for o in $ext_out; do
+    ws_num=$(dispatch_ws "$o" "$ws_count" "$ws_num")
+  done
+
+  hyprctl dispatch moveworkspacetomonitor "$ws_num" "$native_out" >/dev/null
+else
+  ws_num=1
+  while [ "$ws_num" -le 5 ]; do
+    hyprctl dispatch moveworkspacetomonitor "$ws_num" "$native_out" >/dev/null
+    ws_num=$((ws_num + 1))
+  done
+fi
