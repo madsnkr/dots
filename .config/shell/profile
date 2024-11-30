@@ -3,7 +3,7 @@
 # Paths
 export AZURE_CLI_VENV="$HOME/azure-cli-venv"
 export DOTNET_ROOT="$HOME/.dotnet"
-export PATH="$PATH:$HOME/.local/bin:$AZURE_CLI_VENV/bin:$DOTNET_ROOT:$DOTNET_ROOT/tools"
+export PATH="$PATH:$HOME/.local/bin:$HOME/go/bin:$AZURE_CLI_VENV/bin:$DOTNET_ROOT:$DOTNET_ROOT/tools"
 
 # Dark theme
 export GTK_THEME="Adwaita:dark"
