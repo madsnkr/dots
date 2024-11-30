@@ -8,22 +8,12 @@ source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/functions"
 source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliases"
 
 # Zsh options
-setopt -Jhg     # Autocd, ignore space and dups
+setopt AUTO_CD
+setopt HIST_IGNORE_SPACE
+setopt HIST_IGNORE_DUPS
+setopt SHARE_HISTORY
+
 stty stop undef # Disable ctrl-s freeze
-
-# Change cursor shape for different vi modes.
-function zle-keymap-select () {
-    case $KEYMAP in
-        vicmd) echo -ne '\e[1 q';;      # block
-        viins|main) echo -ne '\e[5 q';; # beam
-    esac
-}
-zle -N zle-keymap-select
-zle-line-init() { echo -ne "\e[5 q"; }
-zle -N zle-line-init
-
-preexec() { echo -ne '\e[5 q'; } # Reset to beam for new prompt
-echo -ne '\e[5 q' # Use beam as initial cursor
 
 # Directory navigation with lf
 lfcd () {
@@ -49,7 +39,33 @@ lg()
             rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
     fi
 }
+# Function to set the prompt based on vi mode
+prompt_set(){
+  if [[ $KEYMAP == vicmd ]]; then
+      MODE_INDICATOR="[N]"  # Normal mode indicator
+  else
+      MODE_INDICATOR="[I]"  # Insert mode indicator
+  fi
 
+  # Set the prompt with the mode indicator
+  PROMPT="(%n@%m)${MODE_INDICATOR}$ "
+}
+
+# Trigger prompt update on mode change
+zle-keymap-select(){
+  prompt_set
+  zle reset-prompt
+}
+zle -N zle-keymap-select
+
+# Initialize the prompt when starting a new line
+zle-line-init(){
+  prompt_set
+  zle reset-prompt
+}
+zle -N zle-line-init
+
+prompt_set
 # Completion and bash compatability
 autoload -U compinit bashcompinit
 zmodload zsh/complist
@@ -101,7 +117,6 @@ done
 
 # Keybindings
 bindkey -s '^o' '^ulfcd\n' # Lf
-bindkey -s '^a' '^ubc -lq\n' # bc
 bindkey -s '^f' '^ucd "$(dirname "$(fzf)")"\n' # fzf
 bindkey -s '^g' '^ulg\n' # lazygit
 
@@ -112,4 +127,4 @@ fi
 
 # Colored prompt
 autoload -U colors && colors
-PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%~%{$fg[red]%}]%{$reset_color%}$%b "
+
