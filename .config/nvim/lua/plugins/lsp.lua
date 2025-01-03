@@ -17,7 +17,15 @@ return {
         bashls = {},
         dockerls = {},
         html = {},
-        yamlls = {},
+        yamlls = {
+          settings = {
+            yaml = {
+              schemas = {
+                kubernetes = "*.{yaml,yml}",
+              },
+            },
+          },
+        },
         azure_pipelines_ls = {
           settings = {
             yaml = {
