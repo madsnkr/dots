@@ -48,7 +48,8 @@ prompt_set(){
   fi
 
   # Set the prompt with the mode indicator
-  PROMPT="(%n@%m)${MODE_INDICATOR}$ "
+  NEWLINE=$'\n'
+  PROMPT="%~${NEWLINE}(%n@%m)${MODE_INDICATOR}$ "
 }
 
 # Trigger prompt update on mode change
