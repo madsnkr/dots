@@ -1,5 +1,4 @@
-adwaita-qt5-git
-adwaita-qt6-git
 downgrade
+packettracer
 visual-studio-code-bin
 yay

@@ -1,6 +1,7 @@
 alacritty
 alsa-utils
 artix-archlinux-support
+azure-cli
 base
 base-devel
 bat
@@ -43,6 +44,7 @@ intel-ucode
 iptables-nft
 iptables-runit
 jq
+kubectl
 lazygit
 less
 lf
@@ -61,6 +63,7 @@ ltrace
 lxappearance
 man-db
 meson
+minikube
 navi
 neofetch
 neovim
@@ -73,6 +76,7 @@ noto-fonts-cjk
 noto-fonts-emoji
 noto-fonts-extra
 npm
+obsidian
 openntpd
 openntpd-runit
 openresolv
@@ -95,13 +99,14 @@ remmina
 ripgrep
 rpi-imager
 runit
-screen
 seahorse
 shellcheck-bin
 slurp
 strace
 swaybg
 swaylock
+swtpm
+system76-firmware
 tcpdump
 terraform
 texlive-binextra
@@ -109,6 +114,7 @@ texlive-fontsrecommended
 texlive-latex
 texlive-latexextra
 texlive-plaingeneric
+tmux
 ttf-hack-nerd
 ttf-jetbrains-mono-nerd
 ttf-nerd-fonts-symbols
@@ -118,6 +124,7 @@ virt-manager
 waybar
 wayland
 wget
+whois
 wireguard-runit
 wireguard-tools
 wireshark-cli
