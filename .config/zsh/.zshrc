@@ -119,7 +119,7 @@ done
 # Keybindings
 bindkey -s '^o' '^ulfcd\n' # Lf
 bindkey -s '^f' '^ucd "$(dirname "$(fzf)")"\n' # fzf
-bindkey -s '^e' '^ufzf --preview="cat {}"|xargs -r nvim\n'
+bindkey -s '^e' '^ufzf --print0 --preview="cat {}"|xargs -r -0 nvim\n'
 bindkey -s '^g' '^ulg\n' # lazygit
 
 # Syntax highlighting
