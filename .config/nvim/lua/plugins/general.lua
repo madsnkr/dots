@@ -8,4 +8,11 @@ return {
       vim.g.wiki_root = "~/Documents/wiki"
     end,
   },
+  {
+    "https://codeberg.org/esensar/nvim-dev-container",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      require("devcontainer").setup({})
+    end,
+  },
 }
