@@ -20,5 +20,5 @@ trueloc="$(readlink -f "$1")" &&
     ;;
   esac
 
-swaybg -i "$bgloc" & # Start in background
-pkill -o swaybg      # Kill oldest instance
+pgrep swaybg >/dev/null && pkill swaybg # Kill existing instances
+swaybg -i "$bgloc" &                    # Start in background

@@ -26,6 +26,7 @@ export BROWSER="firefox"                          # Set browser for programs usi
 export ELECTRON_OZONE_PLATFORM_HINT=auto          # Select wayland backend if possible
 export DIFFPROG="nvim -d $1"                      # Override default vim -d merge
 export VIRSH_DEFAULT_CONNECT_URI="qemu:///system" # Connect to system by default
+export WALLPAPER_DIR="$HOME/Pictures/wallpapers"
 
 # Start Hyprland on tty if not running
 if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
