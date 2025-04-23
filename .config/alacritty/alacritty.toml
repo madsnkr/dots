@@ -1,0 +1,56 @@
+[window]
+padding = { x = 6, y = 0 }
+opacity = 0.8
+decorations = "none"
+
+[font]
+size = 13
+
+[font.normal]
+family = "HackNerdFontMono"
+style = "Regular"
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[colors.primary]
+background = "#101010"
+foreground = "#D0D0D0"
+
+[colors.cursor]
+text = "#000000"
+cursor = "#A0A0A0"
+
+[colors.normal]
+black = "#181818"
+red = "#707070"
+green = "#909090"
+yellow = "#B0B0B0"
+blue = "#505050"
+magenta = "#C0C0C0"
+cyan = "#606060"
+white = "#E0E0E0"
+
+[colors.bright]
+black = "#303030"
+red = "#888888"
+green = "#FFFFFF"
+yellow = "#D8D8D8"
+blue = "#686868"
+magenta = "#D8D8D8"
+cyan = "#787878"
+white = "#F0F0F0"
+
+[keyboard]
+bindings = [
+  { key = "C", mods = "Alt", action = "Copy" },
+  { key = "C", mods = "Control|Shift", action = "Copy" },
+  { key = "V", mods = "Alt", action = "Paste" },
+  { key = "V", mods = "Control|Shift", action = "Paste" },
+  { key = "K", mods = "Shift|Alt", action = "IncreaseFontSize" },
+  { key = "J", mods = "Shift|Alt", action = "DecreaseFontSize" },
+  { key = "U", mods = "Alt", action = "ScrollPageUp" },
+  { key = "D", mods = "Alt", action = "ScrollPageDown" },
+  { key = "a", mods = "Alt", command = { program = "opacity", args = ["+"] } },
+  { key = "s", mods = "Alt", command = { program = "opacity", args = ["-"] } },
+]
