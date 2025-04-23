@@ -21,6 +21,7 @@ export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
 
 # Other
+export NVIM_MODE=0                                # Enable/disable LazyVim/IDE config
 export EDITOR="nvim"                              # Set nvim as editor
 export BROWSER="firefox"                          # Set browser for programs using browser
 export ELECTRON_OZONE_PLATFORM_HINT=auto          # Select wayland backend if possible
