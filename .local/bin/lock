@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Checks if the lockscreen image needs to be updated (either doesn't exist or background has changed).
+# If necessary, regenerates the lockscreen image and locks the screen using swaylock.
+
+bp="${XDG_DATA_HOME:-$HOME/.local/share}/bg"
+lp="${XDG_DATA_HOME:-$HOME/.local/share}/lockscreen"
+
+if [ ! -f "$lp" ] || [ -n "$(find "$bp" -newer "$lp")" ]; then
+	magick "$bp" -fill black -colorize 50% "$lp"
+fi
+swaylock -i "$lp"
