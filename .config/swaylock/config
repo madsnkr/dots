@@ -1,0 +1,31 @@
+# Background color (near black)
+color=1a1a1a
+
+# Text color (subtle grey)
+text-color=cccccc
+inside-color=1a1a1a
+ring-color=444444
+line-color=000000
+
+# Highlight color when verifying
+inside-ver-color=222222
+ring-ver-color=888888
+text-ver-color=ffffff
+
+# Highlight color on wrong password
+inside-wrong-color=2a1a1a
+ring-wrong-color=bb0000
+text-wrong-color=ff4444
+
+# Keypress feedback
+key-hl-color=888888
+bs-hl-color=cc4444
+
+# Separator
+separator-color=000000
+
+# Indicator
+indicator-radius=60
+indicator-thickness=5
+
+show-failed-attempts
