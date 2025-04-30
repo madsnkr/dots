@@ -1,4 +1,5 @@
 downgrade
+librewolf
 packettracer
 visual-studio-code-bin
 yay

@@ -1,6 +1,9 @@
 alacritty
 alsa-utils
+apparmor
+apparmor-runit
 artix-archlinux-support
+audit-runit
 azure-cli
 base
 base-devel
@@ -13,6 +16,8 @@ bluez-utils
 btop
 cronie
 cronie-runit
+ctags
+discord
 dnsmasq
 docker
 docker-buildx
@@ -23,12 +28,15 @@ dunst
 efibootmgr
 elogind-runit
 eza
+fastfetch
 fd
 firefox
 firewalld
 firewalld-runit
+foot
 freerdp
 fuzzel
+gimp
 git
 git-lfs
 gnome-keyring
@@ -39,6 +47,7 @@ grub
 gtk4
 hyprland
 hyprwayland-scanner
+imagemagick
 imv
 intel-ucode
 iptables-nft
@@ -50,7 +59,7 @@ less
 lf
 libnotify
 libreoffice-still
-librewolf
+libvirt
 libvirt-runit
 linux
 linux-firmware
@@ -65,7 +74,6 @@ man-db
 meson
 minikube
 navi
-neofetch
 neovim
 networkmanager
 networkmanager-runit
@@ -99,6 +107,7 @@ remmina
 ripgrep
 rpi-imager
 runit
+scapy
 seahorse
 shellcheck-bin
 slurp
@@ -120,6 +129,7 @@ ttf-jetbrains-mono-nerd
 ttf-nerd-fonts-symbols
 udisks2
 unzip
+vim
 virt-manager
 waybar
 wayland
@@ -136,6 +146,7 @@ xdg-desktop-portal-gtk
 xdg-desktop-portal-hyprland
 xdg-user-dirs
 xdg-utils
+yazi
 zathura
 zathura-pdf-mupdf
 zip
