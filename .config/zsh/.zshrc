@@ -15,6 +15,15 @@ setopt SHARE_HISTORY
 
 stty stop undef # Disable ctrl-s freeze
 
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp" > /dev/null
+}
+
 # Directory navigation with lf
 lfcd () {
     local tmp
@@ -117,7 +126,7 @@ for m in visual viopp; do
 done
 
 # Keybindings
-bindkey -s '^o' '^ulfcd\n' # Lf
+bindkey -s '^o' '^uy\n' # yazi
 bindkey -s '^f' '^ucd "$(dirname "$(fzf)")"\n' # fzf
 bindkey -s '^e' '^ufzf --print0 --preview="cat {}"|xargs -r -0 $EDITOR\n'
 bindkey -s '^g' '^ulg\n' # lazygit
