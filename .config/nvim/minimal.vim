@@ -26,3 +26,62 @@ colorscheme yin
 " Enable transparency
 hi Normal guibg=NONE ctermbg=NONE 
 hi NormalNC guibg=NONE ctermbg=NONE
+
+let g:zettelkasten_root = expand('~/Zettelkasten')
+
+function! FileJump()
+	let l:line = getline('.') " Get text on current line
+	let l:col = col('.') - 1 " Get current column number
+	let l:pattern = '\[\[\(.\{-}\)\]\]' " Match [[ ... ]]
+	let l:start = 0
+	let l:link = ''
+
+	" Loop all matches in the line
+	while l:start >= 0
+		let l:match_pos = matchstrpos(l:line, l:pattern, l:start)
+
+		" Break if no match
+		if empty(l:match_pos[0])
+			break
+		endif
+
+		" Extract match info
+		let l:match_text = l:match_pos[0]
+		let l:match_start = l:match_pos[1]
+		let l:match_end = l:match_pos[2]
+
+		" Check if cursor is inside current match
+		if l:col >= l:match_start && l:col <= l:match_end
+			let l:link = matchstr(l:match_text, '\[\[\zs.\{-}\ze\]\]') " Extract inner link content
+			break
+		endif
+
+		" Move search start past current match
+		let l:start = l:match_end
+
+	endwhile
+
+	if empty(l:link)
+		echo "No link under cursor"
+		return
+	endif
+
+	" Extract only the filename
+	let l:filename = split(l:link, '|')[0]
+
+	" Append .md extension if not present
+	if l:filename !~# '\.md$'
+		let l:filename .= '.md'
+	endif
+
+	let l:filepath = g:zettelkasten_root . "/" . l:filename
+
+	if filereadable(l:filepath)
+		execute "edit" fnameescape(l:filepath)
+	else
+		echo "File not found: " .. l:filepath
+	endif
+
+endfunction
+
+nnoremap <CR> :call FileJump()<CR>
