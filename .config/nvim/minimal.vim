@@ -1,4 +1,4 @@
-if ! filereadable(stdpath('data') .. '/site/autoload/plug.vim')
+if ! filereadable(stdpath('data') . '/site/autoload/plug.vim')
 	echo "Setting up vim-plug..."
 	silent !curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	autocmd VimEnter * PlugInstall
@@ -79,7 +79,7 @@ function! FileJump()
 	if filereadable(l:filepath)
 		execute "edit" fnameescape(l:filepath)
 	else
-		echo "File not found: " .. l:filepath
+		echo "File not found: " . l:filepath
 	endif
 
 endfunction
