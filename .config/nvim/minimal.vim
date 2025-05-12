@@ -84,7 +84,25 @@ function! FileJump()
 
 endfunction
 
+function! BackLinks()
+	" If quickfix window is open, just close it and exit
+	if !empty(filter(getwininfo(), 'v:val.quickfix'))
+		cclose
+		return
+	endif
+
+	let l:current = expand('%:p') " Get absolute path of current file
+	let l:name = split(fnamemodify(l:current, ':r'), g:zettelkasten_root . "/")[0] " Split at root of zettelkasten
+
+	silent execute "grep! -g '!**/{.git,.obsidian}/*' " . shellescape(l:name) . " " .  shellescape(g:zettelkasten_root)
+
+	copen
+
+endfunction
+
 augroup FileJumpKeymap
   autocmd!
   autocmd FileType markdown nnoremap <buffer> <CR> :call FileJump()<CR>
 augroup END
+
+nnoremap <Space>zb :call BackLinks()<CR>
