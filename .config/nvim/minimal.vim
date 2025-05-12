@@ -84,4 +84,7 @@ function! FileJump()
 
 endfunction
 
-nnoremap <CR> :call FileJump()<CR>
+augroup FileJumpKeymap
+  autocmd!
+  autocmd FileType markdown nnoremap <buffer> <CR> :call FileJump()<CR>
+augroup END
