@@ -125,10 +125,83 @@ for m in visual viopp; do
   done
 done
 
+fzf_search() {
+    # Define common variables
+    local mode previewer preview_args selected
+
+    # Parse arguments
+    mode="${1:-file}"  # Default to file mode if not specified
+
+    # Set previewer command (bat or fallback to cat)
+    previewer=$(command -v bat &> /dev/null && echo 'bat' || echo 'cat')
+
+    # Define common FZF options
+    local fzf_common_opts=("--tmux" "80%" "--preview-window=up:60%:wrap:+{2}-/2" '--ansi' '--multi')
+
+    # Handle different search modes
+    case "$mode" in
+        "text")
+            _fzf_search_text "$previewer"
+            ;;
+        "file")
+            _fzf_search_files "$previewer"
+            ;;
+        *)
+            echo "Invalid mode: '$mode'. Use 'text' or 'file'."
+            return 1
+            ;;
+    esac
+}
+
+# This function enables multiselect and jump to match for each
+_fzf_search_text()
+{
+	local previewer="$1"
+	local rg_cmd="rg --column --line-number --no-heading --color=always --smart-case"
+	local preview_cmd="$previewer -n --color=always {1} --highlight-line {2}"
+
+	local selected
+	selected=$(fzf ${fzf_common_opts[@]} --disabled --delimiter ':' \
+		--preview="$preview_cmd" \
+		--bind "change:reload:$rg_cmd {q} || true" < /dev/null)
+
+    # Exit if nothing selected
+    [ -z "$selected" ] && return
+
+		# Process selection for Neovim
+		local -a editor_args
+		local first=1
+
+		while IFS= read -r entry; do
+			local filename=$(echo "$entry" | cut -d ':' -f1)
+			local line_num=$(echo "$entry" | cut -d ':' -f2)
+
+			if [ "$first" -eq 1 ]; then
+				editor_args=("$filename" "+$line_num")
+				first=0
+			else
+				editor_args+=("+tabedit $filename" "+$line_num")
+			fi
+		done <<< "$selected"
+
+		# Open selected files in Neovim
+		nvim "${editor_args[@]}"
+}
+
+# Helper function for file search mode
+_fzf_search_files() {
+    local previewer="$1"
+    local preview_cmd="$previewer -n --color=always {1}"
+
+    # Run FZF for file search
+    fzf ${fzf_common_opts[@]} --preview="$preview_cmd" --bind "enter:become($EDITOR -p {+})"
+}
+
 # Keybindings
-bindkey -s '^o' '^uy\n' # yazi
-bindkey -s '^f' '^ucd "$(dirname "$(fzf)")"\n' # fzf
-bindkey -s '^e' '^ufzf --print0 --preview="cat {}"|xargs -r -0 $EDITOR\n'
+bindkey -s '^e' '^uy\n' # yazi
+bindkey -s '^\' '^ucd "$(dirname "$(fzf --tmux)")"\n' # change directories
+bindkey -s '^_' '^ufzf_search "file"\n'
+bindkey -s '^t' '^ufzf_search "text"\n'
 bindkey -s '^g' '^ulg\n' # lazygit
 
 # Syntax highlighting
@@ -138,4 +211,3 @@ fi
 
 # Colored prompt
 autoload -U colors && colors
-
