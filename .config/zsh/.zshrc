@@ -15,39 +15,6 @@ setopt SHARE_HISTORY
 
 stty stop undef # Disable ctrl-s freeze
 
-function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
-	rm -f -- "$tmp" > /dev/null
-}
-
-# Directory navigation with lf
-lfcd () {
-    local tmp
-    tmp="$(mktemp -uq)"
-    trap 'rm -f $tmp >/dev/null 2>&1 && trap - HUP INT QUIT TERM PWR EXIT' HUP INT QUIT TERM PWR EXIT
-    lf -last-dir-path="$tmp" "$@"
-    if [ -f "$tmp" ]; then
-        local dir
-        dir="$(cat "$tmp")"
-        [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
-    fi
-}
-# Change directory to repo after lazygit
-lg()
-{
-    export LAZYGIT_NEW_DIR_FILE=~/.lazygit/newdir
-
-    lazygit "$@"
-
-    if [ -f $LAZYGIT_NEW_DIR_FILE ]; then
-            cd "$(cat $LAZYGIT_NEW_DIR_FILE)"
-            rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
-    fi
-}
 # Function to set the prompt based on vi mode
 prompt_set(){
   if [[ $KEYMAP == vicmd ]]; then
@@ -99,6 +66,7 @@ _dotnet_zsh_complete()
   # This is not a variable assignment, don't remove spaces!
   _values = "${(ps:\n:)completions}"
 }
+
 compdef _dotnet_zsh_complete dotnet
 
 # Azure CLI completion
@@ -124,78 +92,6 @@ for m in visual viopp; do
     bindkey -M $m $c select-bracketed
   done
 done
-
-fzf_search() {
-    # Define common variables
-    local mode previewer preview_args selected
-
-    # Parse arguments
-    mode="${1:-file}"  # Default to file mode if not specified
-
-    # Set previewer command (bat or fallback to cat)
-    previewer=$(command -v bat &> /dev/null && echo 'bat' || echo 'cat')
-
-    # Define common FZF options
-    local fzf_common_opts=("--tmux" "80%" "--preview-window=up:60%:wrap:+{2}-/2" '--ansi' '--multi')
-
-    # Handle different search modes
-    case "$mode" in
-        "text")
-            _fzf_search_text "$previewer"
-            ;;
-        "file")
-            _fzf_search_files "$previewer"
-            ;;
-        *)
-            echo "Invalid mode: '$mode'. Use 'text' or 'file'."
-            return 1
-            ;;
-    esac
-}
-
-# This function enables multiselect and jump to match for each
-_fzf_search_text()
-{
-	local previewer="$1"
-	local rg_cmd="rg --column --line-number --no-heading --color=always --smart-case"
-	local preview_cmd="$previewer -n --color=always {1} --highlight-line {2}"
-
-	local selected
-	selected=$(fzf ${fzf_common_opts[@]} --disabled --delimiter ':' \
-		--preview="$preview_cmd" \
-		--bind "change:reload:$rg_cmd {q} || true" < /dev/null)
-
-    # Exit if nothing selected
-    [ -z "$selected" ] && return
-
-		# Process selection for Neovim
-		local -a editor_args
-		local first=1
-
-		while IFS= read -r entry; do
-			local filename=$(echo "$entry" | cut -d ':' -f1)
-			local line_num=$(echo "$entry" | cut -d ':' -f2)
-
-			if [ "$first" -eq 1 ]; then
-				editor_args=("$filename" "+$line_num")
-				first=0
-			else
-				editor_args+=("+tabedit $filename" "+$line_num")
-			fi
-		done <<< "$selected"
-
-		# Open selected files in Neovim
-		nvim "${editor_args[@]}"
-}
-
-# Helper function for file search mode
-_fzf_search_files() {
-    local previewer="$1"
-    local preview_cmd="$previewer -n --color=always {}"
-
-    # Run FZF for file search
-    fzf ${fzf_common_opts[@]} --preview="$preview_cmd" --bind "enter:become($EDITOR -p {+})"
-}
 
 # Keybindings
 bindkey -s '^e' '^uy\n' # yazi

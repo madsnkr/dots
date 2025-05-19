@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Lists files taking up the most space
 dutop() {
   local fp="/"
   local amount=20
@@ -38,6 +39,7 @@ dutop() {
   sudo du -hax "$fp" | sort -rh | head -n"$amount"
 }
 
+# List explicitly installed packages
 lsxp() {
   local explicit=$(mktemp)
   local aur=$(mktemp)
@@ -50,4 +52,100 @@ lsxp() {
 
   # Clean up temporary files
   rm "$explicit" "$aur"
+}
+
+# Change directory to repo after lazygit
+lg()
+{
+    export LAZYGIT_NEW_DIR_FILE=~/.lazygit/newdir
+
+    lazygit "$@"
+
+    if [ -f $LAZYGIT_NEW_DIR_FILE ]; then
+            cd "$(cat $LAZYGIT_NEW_DIR_FILE)"
+            rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
+    fi
+}
+
+# Change directory with yazi
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp" > /dev/null
+}
+
+# Handles call of fzf search helper functions
+fzf_search() {
+    # Define common variables
+    local mode previewer preview_args selected
+
+    # Parse arguments
+    mode="${1:-file}"  # Default to file mode if not specified
+
+    # Set previewer command (bat or fallback to cat)
+    previewer=$(command -v bat &> /dev/null && echo 'bat' || echo 'cat')
+
+    # Define common FZF options
+    local fzf_common_opts=("--tmux" "80%" "--preview-window=up:60%:wrap:+{2}-/2" '--ansi' '--multi')
+
+    # Handle different search modes
+    case "$mode" in
+        "text")
+            _fzf_search_text "$previewer"
+            ;;
+        "file")
+            _fzf_search_files "$previewer"
+            ;;
+        *)
+            echo "Invalid mode: '$mode'. Use 'text' or 'file'."
+            return 1
+            ;;
+    esac
+}
+
+# Helper function for text search mode
+_fzf_search_text()
+{
+	local previewer="$1"
+	local rg_cmd="rg --column --line-number --no-heading --color=always --smart-case"
+	local preview_cmd="$previewer -n --color=always {1} --highlight-line {2}"
+
+	local selected
+	selected=$(fzf ${fzf_common_opts[@]} --disabled --delimiter ':' \
+		--preview="$preview_cmd" \
+		--bind "change:reload:$rg_cmd {q} || true" < /dev/null)
+
+    # Exit if nothing selected
+    [ -z "$selected" ] && return
+
+		# Process selection for Neovim
+		local -a editor_args
+		local first=1
+
+		while IFS= read -r entry; do
+			local filename=$(echo "$entry" | cut -d ':' -f1)
+			local line_num=$(echo "$entry" | cut -d ':' -f2)
+
+			if [ "$first" -eq 1 ]; then
+				editor_args=("$filename" "+$line_num")
+				first=0
+			else
+				editor_args+=("+tabedit $filename" "+$line_num")
+			fi
+		done <<< "$selected"
+
+		# Open selected files in Neovim
+		nvim "${editor_args[@]}"
+}
+
+# Helper function for file search mode
+_fzf_search_files() {
+    local previewer="$1"
+    local preview_cmd="$previewer -n --color=always {}"
+
+    # Run FZF for file search
+    fzf ${fzf_common_opts[@]} --preview="$preview_cmd" --bind "enter:become($EDITOR -p {+})"
 }
