@@ -26,7 +26,7 @@ alias \
   l.="ls -dl .*" \
   lsa="ls -lah" \
   c.="cd ~/.config" \
-  alias chmox='chmod +x'
+  chmox='chmod +x'
 
 # Shorten common commands
 alias \
@@ -73,7 +73,7 @@ alias \
   lsaur="pacman -Qqm"
 
 command -v bat >/dev/null 2>&1 &&
-  alias cat="bat --style=plain"
+  alias cat="bat -p"
 
 command -v eza >/dev/null 2>&1 &&
   alias ls="eza -h --color=always --group-directories-first --color-scale=age --icons=auto"
