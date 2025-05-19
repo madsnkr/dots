@@ -191,7 +191,7 @@ _fzf_search_text()
 # Helper function for file search mode
 _fzf_search_files() {
     local previewer="$1"
-    local preview_cmd="$previewer -n --color=always {1}"
+    local preview_cmd="$previewer -n --color=always {}"
 
     # Run FZF for file search
     fzf ${fzf_common_opts[@]} --preview="$preview_cmd" --bind "enter:become($EDITOR -p {+})"
