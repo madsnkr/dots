@@ -116,6 +116,7 @@ _fzf_search_text()
 	local selected
 	selected=$(fzf ${fzf_common_opts[@]} --disabled --delimiter ':' \
 		--preview="$preview_cmd" \
+		--bind 'alt-enter:execute-silent($EDITOR --server "$(ls -tr $XDG_RUNTIME_DIR/nvim.*.0|head -n1)" --remote-tab-silent {+1})' \
 		--bind "change:reload:$rg_cmd {q} || true" < /dev/null)
 
     # Exit if nothing selected
@@ -147,5 +148,7 @@ _fzf_search_files() {
     local preview_cmd="$previewer -n --color=always {}"
 
     # Run FZF for file search
-    fzf ${fzf_common_opts[@]} --preview="$preview_cmd" --bind "enter:become($EDITOR -p {+})"
+    fzf ${fzf_common_opts[@]} --preview="$preview_cmd" \
+			--bind "enter:become($EDITOR -p {+})" \
+			--bind 'alt-enter:execute-silent($EDITOR --server "$(ls -tr $XDG_RUNTIME_DIR/nvim.*.0|head -n1)" --remote-tab-silent {+1})'
 }
