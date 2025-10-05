@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Use sudo for commands
-for command in nft mount umount sv pacman updatedb su shutdown poweroff reboot; do
+for command in wg nft mount umount sv pacman updatedb su shutdown poweroff reboot; do
   # shellcheck disable=SC2139
   alias $command="sudo $command"
 done
