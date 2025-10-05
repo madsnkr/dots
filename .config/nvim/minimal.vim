@@ -6,6 +6,8 @@ endif
 
 set number relativenumber "Line numbers
 set clipboard+=unnamedplus "Use system clipboard
+set formatoptions-=cro " Disable comment continuation
+set ic " Case insensitive search
 set nohlsearch "Disable search highlighting
 set mouse=a "Mouse support for all modes
 set tabstop=2 "Number of spaces tabs counts for
