@@ -15,34 +15,33 @@ setopt SHARE_HISTORY
 
 stty stop undef # Disable ctrl-s freeze
 
-# Function to set the prompt based on vi mode
-prompt_set(){
-  if [[ $KEYMAP == vicmd ]]; then
-      MODE_INDICATOR="[N]"  # Normal mode indicator
-  else
-      MODE_INDICATOR="[I]"  # Insert mode indicator
-  fi
-
-  # Set the prompt with the mode indicator
-  NEWLINE=$'\n'
-  PROMPT="%~${NEWLINE}(%n@%m)${MODE_INDICATOR}$ "
-}
-
-# Trigger prompt update on mode change
+# Change cursor based on mode
 zle-keymap-select(){
-  prompt_set
-  zle reset-prompt
+  if [[ ${KEYMAP} == vicmd ]]; then
+      echo -ne '\e[2 q' # block
+    else
+      echo -ne  '\e[6 q' # beam
+  fi
 }
 zle -N zle-keymap-select
 
 # Initialize the prompt when starting a new line
 zle-line-init(){
-  prompt_set
-  zle reset-prompt
+  zle -K viins
+  echo -ne '\e[6 q'
+}
+# block cursor when leaving line editor
+zle-line-finish() {
+  echo -ne '\e[2 q'
+}
+vi-yank-clipboard() {
+  zle vi-yank
+  echo "$CUTBUFFER" | wl-copy
 }
 zle -N zle-line-init
+zle -N zle-line-finish
+zle -N vi-yank-clipboard
 
-prompt_set
 # Completion and bash compatability
 autoload -U compinit bashcompinit
 zmodload zsh/complist
@@ -80,8 +79,10 @@ bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
 bindkey -v '^?' backward-delete-char
-autoload -U select-quoted select-bracketed
-zle -N select-quoted && zle -N select-bracketed
+autoload -U select-quoted select-bracketed edit-command-line
+zle -N select-quoted
+zle -N select-bracketed
+zle -N edit-command-line
 for m in visual viopp; do
   # ci",ca"..
   for c in {a,i}{\',\",\`}; do
@@ -94,11 +95,13 @@ for m in visual viopp; do
 done
 
 # Keybindings
-bindkey -s '^e' '^uy\n' # yazi
+bindkey -s '^y' '^uy\n' # yazi
 bindkey -s '^\' '^ucd "$(dirname "$(fzf --tmux)")"\n' # change directories
 bindkey -s '^_' '^ufzf_search "file"\n'
 bindkey -s '^t' '^ufzf_search "text"\n'
 bindkey -s '^g' '^ulg\n' # lazygit
+bindkey -M vicmd '^e' edit-command-line
+bindkey -M vicmd 'y' vi-yank-clipboard
 
 # Syntax highlighting
 if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
