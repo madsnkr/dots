@@ -5,6 +5,9 @@ bgloc="${XDG_DATA_HOME:-$HOME/.local/share}/bg"
 while getopts "s" o; do
   case "${o}" in
   s) silent='1' ;;
+  *)
+    exit 1
+    ;;
   esac
 done
 
@@ -21,4 +24,4 @@ trueloc="$(readlink -f "$1")" &&
   esac
 
 pgrep swaybg >/dev/null && pkill swaybg # Kill existing instances
-swaybg -i "$bgloc" &                    # Start in background
+swaybg -i "$bgloc" >/dev/null 2>&1 &    # Start in background
