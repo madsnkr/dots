@@ -96,9 +96,6 @@ done
 
 # Keybindings
 bindkey -s '^y' '^uy\n' # yazi
-bindkey -s '^\' '^ucd "$(dirname "$(fzf --tmux)")"\n' # change directories
-bindkey -s '^_' '^ufzf_search "file"\n'
-bindkey -s '^t' '^ufzf_search "text"\n'
 bindkey -s '^g' '^ulg\n' # lazygit
 bindkey -M vicmd '^e' edit-command-line
 bindkey -M vicmd 'y' vi-yank-clipboard
@@ -108,5 +105,18 @@ if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.z
   source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 fi
 
+# Enable fzf
+if [[ -d /usr/share/fzf ]]; then
+  source /usr/share/fzf/key-bindings.zsh 2>/dev/null
+  source /usr/share/fzf/completion.zsh 2>/dev/null
+  bindkey '^[d' fzf-cd-widget
+fi
+
+# Setup custom fzf widgets
+source "${ZDOTDIR:-$HOME/.config/zsh}/widgets/fzf.zsh"
+bindkey '^f' fzf_search_files
+bindkey '^_' fzf_search_text
+
 # Colored prompt
 autoload -U colors && colors
+PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%~%{$fg[red]%}]%{$reset_color%}$%b "
