@@ -65,6 +65,7 @@ function! FileJump()
 
 	if empty(l:link)
 		echo "No link under cursor"
+
 		return
 	endif
 
@@ -75,14 +76,25 @@ function! FileJump()
 	if l:filename !~# '\.md$'
 		let l:filename .= '.md'
 	endif
-
-	let l:filepath = g:zettelkasten_root . "/" . l:filename
-
-	if filereadable(l:filepath)
-		execute "edit" fnameescape(l:filepath)
+	
+	" Construct filepath based on filename pattern
+	if l:filename =~ '^/' " prefix '/'
+		let l:filepath = simplify(g:zettelkasten_root . l:filename)
+	elseif l:filename =~ '^\.\{1,2}/' " prefix './' or '../'
+		let l:filepath = simplify(expand('%:p:h') . '/' . l:filename)
 	else
-		echo "File not found: " . l:filepath
+		let l:filepath = glob(g:zettelkasten_root . '/**/' . l:filename) " search recursively
+
+		if l:filepath == ''
+			let l:filepath = simplify(g:zettelkasten_root . '/' . l:filename) " default to root
+		endif
 	endif
+
+	if !filereadable(l:filepath)
+		echo "Opened new file:" l:filepath
+	endif
+
+	execute "edit" fnameescape(l:filepath)
 
 endfunction
 
