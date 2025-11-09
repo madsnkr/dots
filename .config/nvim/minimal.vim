@@ -105,8 +105,7 @@ function! BackLinks()
 		return
 	endif
 
-	let l:current = expand('%:p') " Get absolute path of current file
-	let l:name = split(fnamemodify(l:current, ':r'), g:zettelkasten_root . "/")[0] " Split at root of zettelkasten
+	let l:name = expand('%:t:r') 
 
 	silent execute "grep! -g '!**/{.git,.obsidian}/*' " . shellescape(l:name) . " " .  shellescape(g:zettelkasten_root)
 
