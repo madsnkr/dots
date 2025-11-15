@@ -107,7 +107,11 @@ function! BackLinks()
 
 	let l:name = expand('%:t:r') 
 
-	silent execute "grep! -g '!**/{.git,.obsidian}/*' " . shellescape(l:name) . " " .  shellescape(g:zettelkasten_root)
+	let l:pattern = '\[\[([\w\s./]*/)?' . l:name . '(\\|[^\]]*)?\]\]'
+
+	let l:cmd = "grep! -g '!**/{.git,.obsidian}/*' " . shellescape(l:pattern) . " " . shellescape(g:zettelkasten_root)
+
+	silent execute l:cmd
 
 	copen
 
