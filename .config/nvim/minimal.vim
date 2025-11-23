@@ -98,6 +98,55 @@ function! FileJump()
 
 endfunction
 
+function! RenameLink()
+	" Get current filepath and bufnr
+	let l:current = expand('%:p')
+	let l:buf = bufnr('%')
+
+	" Prompt for user input
+	call inputsave()
+	let l:new = input("Enter new name: ", l:current, "filetype")
+	call inputrestore()
+
+	if l:new == '' || l:new == l:current
+		return
+	endif
+
+	call rename(l:current, l:new)
+
+	" Update buffer filepath
+	execute "file " . fnameescape(l:new)
+
+	let l:oldname = expand('#:t:r') 
+	let l:newname = expand('%:t:r')
+
+	" Populate the qflist with link matches
+	call PopulateMatches(l:oldname)
+
+	let l:qf_size = len(getqflist())
+
+	let l:pattern = '\[\[\([\w\s./]*/\)\=' . l:oldname . '\(|[^\]]*\)\=\]\]'
+	let l:replacement = '[[\1' . l:newname . '\2]]'
+
+	silent execute 'cfdo %s@' . l:pattern . '@' . l:replacement . '@g | update'
+
+	echo "Updated " . l:qf_size . " file(s)"
+
+	" Jump back to the file
+	execute 'buffer' l:buf
+
+endfunction
+
+function! PopulateMatches(name)
+
+	let l:pattern = '\[\[([\w\s./]*/)?' . a:name . '(\\|[^\]]*)?\]\]'
+
+	let l:cmd = "grep! -g '!**/{.git,.obsidian}/*' " . shellescape(l:pattern) . " " . shellescape(g:zettelkasten_root)
+
+	silent execute l:cmd
+
+endfunction
+
 function! BackLinks()
 	" If quickfix window is open, just close it and exit
 	if !empty(filter(getwininfo(), 'v:val.quickfix'))
@@ -107,11 +156,7 @@ function! BackLinks()
 
 	let l:name = expand('%:t:r') 
 
-	let l:pattern = '\[\[([\w\s./]*/)?' . l:name . '(\\|[^\]]*)?\]\]'
-
-	let l:cmd = "grep! -g '!**/{.git,.obsidian}/*' " . shellescape(l:pattern) . " " . shellescape(g:zettelkasten_root)
-
-	silent execute l:cmd
+	call PopulateMatches(l:name)
 
 	copen
 
