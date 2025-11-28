@@ -21,11 +21,8 @@ syntax on "Enable syntax highlighting
 call plug#begin()
 
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'pgdouyon/vim-yin-yang'
 
 call plug#end()
-
-colorscheme yin
 
 " Enable transparency
 hi Normal guibg=NONE ctermbg=NONE 
