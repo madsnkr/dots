@@ -166,4 +166,5 @@ augroup FileJumpKeymap
   autocmd FileType markdown nnoremap <buffer> <CR> :call FileJump()<CR>
 augroup END
 
-nnoremap <Leader>zb :call BackLinks()<CR>
+map <Leader>zb :call BackLinks()<CR>
+map <Leader>fr :call FileRename()<CR>
