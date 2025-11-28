@@ -4,6 +4,8 @@ if ! filereadable(stdpath('data') . '/site/autoload/plug.vim')
 	autocmd VimEnter * PlugInstall
 endif
 
+let mapleader = " "
+
 set number relativenumber "Line numbers
 set clipboard+=unnamedplus "Use system clipboard
 set formatoptions-=cro " Disable comment continuation
@@ -167,4 +169,4 @@ augroup FileJumpKeymap
   autocmd FileType markdown nnoremap <buffer> <CR> :call FileJump()<CR>
 augroup END
 
-nnoremap <Space>zb :call BackLinks()<CR>
+nnoremap <Leader>zb :call BackLinks()<CR>
