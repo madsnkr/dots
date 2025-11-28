@@ -97,7 +97,7 @@ function! FileJump()
 
 endfunction
 
-function! RenameLink()
+function! FileRename()
 	" Get current filepath and bufnr
 	let l:current = expand('%:p')
 	let l:buf = bufnr('%')
