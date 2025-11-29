@@ -161,6 +161,14 @@ function! BackLinks()
 
 endfunction
 
+function! JournalDaily()
+	let l:date = strftime("%F")
+	let l:journal = g:zettelkasten_root . "/journal/" . l:date . ".md"
+
+	echo "Opened journal for" l:date
+	execute "edit" fnameescape(l:journal)
+
+endfunction
 augroup FileJumpKeymap
   autocmd!
   autocmd FileType markdown nnoremap <buffer> <CR> :call FileJump()<CR>
@@ -168,3 +176,4 @@ augroup END
 
 map <Leader>zb :call BackLinks()<CR>
 map <Leader>fr :call FileRename()<CR>
+map <Leader>zj :call JournalDaily()<CR>
