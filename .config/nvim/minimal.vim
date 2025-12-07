@@ -111,6 +111,12 @@ function! FileRename()
 		return
 	endif
 
+	" Handle directory creation if non-existant
+	let l:dir = fnamemodify(l:new, ":h")
+	if !isdirectory(l:dir)
+		call mkdir(l:dir, "p")
+	endif
+
 	call rename(l:current, l:new)
 
 	" Update buffer filepath
