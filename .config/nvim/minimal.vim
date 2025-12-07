@@ -28,7 +28,7 @@ call plug#end()
 hi Normal guibg=NONE ctermbg=NONE 
 hi NormalNC guibg=NONE ctermbg=NONE
 
-let g:zettelkasten_root = expand('~/Zettelkasten')
+let g:sb_root = expand('~/sb')
 
 function! FileJump()
 	let l:line = getline('.') " Get text on current line
@@ -75,17 +75,17 @@ function! FileJump()
 	if l:filename !~# '\.md$'
 		let l:filename .= '.md'
 	endif
-	
+
 	" Construct filepath based on filename pattern
 	if l:filename =~ '^/' " prefix '/'
-		let l:filepath = simplify(g:zettelkasten_root . l:filename)
+		let l:filepath = simplify(g:sb_root . l:filename)
 	elseif l:filename =~ '^\.\{1,2}/' " prefix './' or '../'
 		let l:filepath = simplify(expand('%:p:h') . '/' . l:filename)
 	else
-		let l:filepath = glob(g:zettelkasten_root . '/**/' . l:filename) " search recursively
+		let l:filepath = glob(g:sb_root . '/**/' . l:filename) " search recursively
 
 		if l:filepath == ''
-			let l:filepath = simplify(g:zettelkasten_root . '/' . l:filename) " default to root
+			let l:filepath = simplify(g:sb_root . '/' . l:filename) " default to root
 		endif
 	endif
 
@@ -140,7 +140,7 @@ function! PopulateMatches(name)
 
 	let l:pattern = '\[\[([\w\s./]*/)?' . a:name . '(\\|[^\]]*)?\]\]'
 
-	let l:cmd = "grep! -g '!**/{.git,.obsidian}/*' " . shellescape(l:pattern) . " " . shellescape(g:zettelkasten_root)
+	let l:cmd = "grep! -g '!**/{.git,.obsidian}/*' " . shellescape(l:pattern) . " " . shellescape(g:sb_root)
 
 	silent execute l:cmd
 
@@ -163,7 +163,7 @@ endfunction
 
 function! JournalDaily()
 	let l:date = strftime("%F")
-	let l:journal = g:zettelkasten_root . "/journal/" . l:date . ".md"
+	let l:journal = g:sb_root . "/Journal/" . l:date . ".md"
 
 	echo "Opened journal for" l:date
 	execute "edit" fnameescape(l:journal)
@@ -174,6 +174,6 @@ augroup FileJumpKeymap
   autocmd FileType markdown nnoremap <buffer> <CR> :call FileJump()<CR>
 augroup END
 
-map <Leader>zb :call BackLinks()<CR>
-map <Leader>fr :call FileRename()<CR>
-map <Leader>zj :call JournalDaily()<CR>
+map <Leader>sbb :call BackLinks()<CR>
+map <Leader>sbr :call FileRename()<CR>
+map <Leader>sbj :call JournalDaily()<CR>
