@@ -39,5 +39,5 @@ if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
   pipewire 2>"/tmp/pipewire-$(date +%F-%R).log" &
   pipewire-pulse 2>"/tmp/pipewire-pulse-$(date +%F-%R).log" &
   wireplumber 2>"/tmp/wireplumber-$(date +%F-%R).log" &
-  exec dbus-run-session -- ssh-agent Hyprland >"/tmp/hyprland-$(date +%F-%R).log" 2>&1
+  exec dbus-run-session -- ssh-agent start-hyprland >"/tmp/hyprland-$(date +%F-%R).log" 2>&1
 fi
