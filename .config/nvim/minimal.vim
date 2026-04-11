@@ -183,3 +183,6 @@ augroup END
 map <Leader>sbb :call BackLinks()<CR>
 map <Leader>sbr :call FileRename()<CR>
 map <Leader>sbj :call JournalDaily()<CR>
+map <Leader>lnb :setlocal spell spelllang=nb<CR>
+map <Leader>lnn :setlocal spell spelllang=nn<CR>
+map <Leader>len :setlocal spell spelllang=en<CR>
