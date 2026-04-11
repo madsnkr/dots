@@ -8,7 +8,6 @@ let mapleader = " "
 
 set number relativenumber "Line numbers
 set clipboard+=unnamedplus "Use system clipboard
-set formatoptions-=cro " Disable comment continuation
 set ic " Case insensitive search
 set nohlsearch "Disable search highlighting
 set mouse=a "Mouse support for all modes
@@ -175,9 +174,15 @@ function! JournalDaily()
 	execute "edit" fnameescape(l:journal)
 
 endfunction
+
 augroup FileJumpKeymap
   autocmd!
   autocmd FileType markdown nnoremap <buffer> <CR> :call FileJump()<CR>
+augroup END
+
+augroup NoCommentContinuation
+  autocmd!
+  autocmd BufEnter,FileType * set formatoptions-=cro
 augroup END
 
 map <Leader>sbb :call BackLinks()<CR>
