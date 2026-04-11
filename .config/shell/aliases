@@ -70,7 +70,8 @@ alias \
   paths='echo -e ${PATH//:/"\n"}' \
   get="curl -O -L" \
   follow='tail -F -n 100' \
-  lsaur="pacman -Qqm"
+  lsaur="pacman -Qqm" \
+	rmorph="pacman -Qtdq | pacman -Rns -"
 
 command -v bat >/dev/null 2>&1 &&
   alias cat="bat -p"
