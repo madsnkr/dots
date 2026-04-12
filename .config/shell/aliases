@@ -24,7 +24,7 @@ alias \
 # Shortcuts
 alias \
   l.="ls -dl .*" \
-  lsa="ls -lah" \
+  la="ls -lah" \
   c.="cd ~/.config" \
   chmox='chmod +x'
 
