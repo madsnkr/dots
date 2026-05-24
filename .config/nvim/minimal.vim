@@ -8,7 +8,7 @@ let mapleader = " "
 
 set number relativenumber "Line numbers
 set clipboard+=unnamedplus "Use system clipboard
-set ic " Case insensitive search
+set ic scs " Ignore + smart case
 set nohlsearch "Disable search highlighting
 set mouse=a "Mouse support for all modes
 set tabstop=2 "Number of spaces tabs counts for
