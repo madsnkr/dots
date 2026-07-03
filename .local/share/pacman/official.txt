@@ -48,6 +48,7 @@ hyprland
 hyprwayland-scanner
 imagemagick
 imv
+intel-media-driver
 intel-ucode
 iptables-nft
 iptables-runit
@@ -58,6 +59,8 @@ less
 lf
 libnotify
 libreoffice-still
+librewolf
+libva-utils
 libvirt
 libvirt-runit
 linux
@@ -71,6 +74,7 @@ ltrace
 lxappearance
 mako
 man-db
+man-pages
 meson
 minikube
 navi
@@ -84,6 +88,7 @@ noto-fonts-cjk
 noto-fonts-emoji
 noto-fonts-extra
 npm
+nwg-displays
 obsidian
 openntpd
 openntpd-runit
