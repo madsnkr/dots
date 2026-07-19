@@ -57,7 +57,8 @@ exec swayidle -w \
 #   }
 #
    input type:keyboard {
-       xkb_layout "us"
+       xkb_layout "us,no"
+			 xkb_options compose:ralt
 			 repeat_delay 250
 			 repeat_rate 100
    }
