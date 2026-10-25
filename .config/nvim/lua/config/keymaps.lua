@@ -33,6 +33,14 @@ vim.keymap.set("i", "jk", "<Esc>", vim.tbl_extend("force", opts, { desc = "Escap
 -- Window
 vim.keymap.set("n", "<C-q>", "<C-w>q", vim.tbl_extend("force", opts, { desc = "Close window" }))
 
+-- Lazygit for the dotfiles bare repo (~/.dots)
+vim.keymap.set("n", "<leader>g.", function()
+	Snacks.lazygit({
+		cwd = vim.env.HOME,
+		args = { "--git-dir=" .. vim.env.HOME .. "/.dots", "--work-tree=" .. vim.env.HOME },
+	})
+end, vim.tbl_extend("force", opts, { desc = "Lazygit (dotfiles)" }))
+
 -- Clear quickfix list
 vim.keymap.set(
   "n",
