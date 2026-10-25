@@ -32,7 +32,6 @@ alias \
 alias \
   g="git" \
   v="nvim" \
-  z="zathura" \
   p="pacman" \
   o="xdg-open" \
   t="tmux"
@@ -71,7 +70,7 @@ alias \
   get="curl -O -L" \
   follow='tail -F -n 100' \
   lsaur="pacman -Qqm" \
-	rmorph="pacman -Qtdq | pacman -Rns -"
+  rmorph="pacman -Qtdq | pacman -Rns -"
 
 command -v bat >/dev/null 2>&1 &&
   alias cat="bat -p"
