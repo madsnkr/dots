@@ -1,0 +1,115 @@
+# Core packages, installed on every machine.
+# Microcode and GPU drivers are picked by steps/packages.sh.
+
+# Base
+base
+base-devel
+linux
+linux-headers
+linux-firmware
+runit
+elogind-runit
+grub
+efibootmgr
+os-prober
+man-db
+man-pages
+git
+openssh
+
+# Network, time, firewall
+networkmanager-runit
+openntpd-runit
+firewalld-runit
+iptables-nft
+
+# Audio
+pipewire
+pipewire-alsa
+pipewire-pulse
+pipewire-jack
+wireplumber
+alsa-utils
+playerctl
+
+# Video
+mesa
+vulkan-icd-loader
+libva-utils
+
+# Desktop
+sway
+swayidle
+swaylock
+swaybg
+waybar
+mako
+fuzzel
+foot
+grim
+slurp
+wl-clipboard
+wlsunset
+brightnessctl
+xdg-desktop-portal-wlr
+xdg-desktop-portal-gtk
+xdg-utils
+xdg-user-dirs
+polkit-gnome
+qt5-wayland
+qt6-wayland
+gnome-themes-extra
+libnotify
+noto-fonts
+noto-fonts-emoji
+ttf-jetbrains-mono-nerd
+imv
+zathura
+zathura-pdf-mupdf
+firefox
+
+# Shell and dev
+zsh
+zsh-syntax-highlighting
+tmux
+neovim
+lf
+yazi
+fzf
+ripgrep
+fd
+bat
+eza
+btop
+jq
+lazygit
+less
+unzip
+zip
+wget
+
+# Bluetooth
+bluez-runit
+bluez-utils
+
+# Security
+apparmor-runit
+audit-runit
+
+# Virtualization
+qemu-full
+libvirt-runit
+virt-manager
+dnsmasq
+swtpm
+edk2-ovmf
+
+# Docker
+docker-runit
+docker-buildx
+docker-compose
+
+# Misc
+cronie-runit
+udisks2
+pacman-contrib
