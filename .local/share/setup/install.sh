@@ -42,11 +42,35 @@ done
 
 [[ $EUID -ne 0 ]] || die "Run as your normal user, not root (makepkg refuses root)"
 
-# Ask for the password once and keep sudo alive until we exit
+# Only messages go to the terminal, command output goes to the log
+LOG=${XDG_STATE_HOME:-$HOME/.local/state}/setup/install-$(date +%F-%H%M%S).log
+mkdir -p "${LOG%/*}"
+exec >>"$LOG" 2>&1
+log "Logging to $LOG (tail -f it to follow along)"
+
+nopasswd=
+finish() {
+  local code=$?
+  if ((code)); then
+    tail -n 20 "$LOG" | sed 's/^/   /' >&4
+    warn "Failed, full log: $LOG"
+  fi
+  [[ -z $nopasswd ]] || sudo rm -f "$nopasswd"
+}
+trap finish EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+# Ask for the password once. A cached sudo login can expire or be asked
+# for again by makepkg and yay during long builds, so allow passwordless
+# sudo until we exit. zz sorts last, so it wins over 10-wheel
 sudo -v || die "sudo is required"
-while sleep 50; do sudo -n true; done 2>/dev/null &
-keepalive=$!
-trap 'kill "$keepalive" 2>/dev/null' EXIT
+tmp=$(mktemp)
+echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" >"$tmp"
+sudo visudo -cqf "$tmp" || die "Couldn't validate the temporary sudoers rule"
+sudo install -m 0440 "$tmp" /etc/sudoers.d/zz-install
+nopasswd=/etc/sudoers.d/zz-install
+rm -f "$tmp"
 
 REBOOT_NEEDED=0
 
@@ -58,6 +82,6 @@ for step in "${steps[@]}"; do
   source "$dir/steps/$step.sh"
 done
 
-log "Done"
+log "Done, log: $LOG"
 ((REBOOT_NEEDED)) && warn "Reboot to finish (kernel parameters, groups, services)"
 exit 0

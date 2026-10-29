@@ -1,15 +1,26 @@
 # shellcheck shell=bash
 # Helpers shared by install.sh and the steps
 
-log() { printf '\033[1;34m::\033[0m %s\n' "$*"; }
-warn() { printf '\033[1;33m!!\033[0m %s\n' "$*" >&2; }
+# Messages always reach the terminal through fd 3 and 4, even after
+# install.sh sends command output to $LOG. They're copied to $LOG when set
+exec 3>&1 4>&2
+
+say() {
+  local fd=$1 mark=$2 color=$3
+  shift 3
+  printf '\033[%sm%s\033[0m %s\n' "$color" "$mark" "$*" >&"$fd"
+  [[ -z ${LOG:-} ]] || printf '%s %s\n' "$mark" "$*" >>"$LOG"
+}
+
+log() { say 3 :: '1;34' "$@"; }
+warn() { say 4 '!!' '1;33' "$@"; }
 die() {
-  printf '\033[1;31mxx\033[0m %s\n' "$*" >&2
+  say 4 xx '1;31' "$@"
   exit 1
 }
 
 confirm() {
-  read -rp "$1 [y/N] " yn
+  read -rp "$1 [y/N] " yn 2>&4
   [[ $yn == [Yy]* ]]
 }
 
