@@ -10,7 +10,7 @@
 #
 # Disks live in $VM_DIR (default ~/VM/Test/artix-test), the guest screen is
 # $VM_RES (default 1920x1080). Inside the guest:
-#   sudo mount -t 9p -o trans=virtio setup /mnt   # this repo, read-only
+#   sudo mount -t 9p -o trans=virtio setup ~/.local/share/setup   # this repo, read-only
 #   ssh -p 2222 <user>@localhost                  # from the host, needs sshd
 set -euo pipefail
 
