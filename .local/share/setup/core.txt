@@ -93,6 +93,7 @@ bluez-runit
 bluez-utils
 
 # Security
+apparmor
 apparmor-runit
 audit-runit
 

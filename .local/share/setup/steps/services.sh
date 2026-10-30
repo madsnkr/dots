@@ -3,5 +3,5 @@
 
 svc dbus elogind udevd \
 	NetworkManager openntpd firewalld \
-	cronie bluetoothd auditd apparmor \
+	cronie bluetoothd auditd \
 	docker libvirtd virtlogd virtlockd
