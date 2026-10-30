@@ -12,13 +12,14 @@ repo=https://github.com/madsnkr/dots.git
 dots() { git --git-dir="$HOME/.dots" --work-tree="$HOME" "$@"; }
 
 [[ $EUID -ne 0 ]] || { echo "Run as your normal user, not root" >&2; exit 1; }
-command -v git >/dev/null || sudo pacman -S --needed --noconfirm git
+command -v git >/dev/null || echo "Installing git" && sudo pacman -Sy --needed --noconfirm git >/dev/null
 
 cd "$HOME"
 
 if [[ ! -d .dots ]]; then
-	git clone --bare "$repo" .dots
-	dots config --local status.showUntrackedFiles no
+  echo "Cloning dotfiles repo to $HOME/.dots"
+  git clone --bare "$repo" .dots &>/dev/null
+  dots config --local status.showUntrackedFiles no
 fi
 
 # Move files the checkout would overwrite out of the way instead of deleting them
