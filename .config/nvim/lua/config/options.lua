@@ -3,3 +3,5 @@
 -- Add any additional options here
 
 vim.opt.scrolloff = 999 -- Keep cursor vertically centered
+vim.g.snacks_animate = false -- Disable animations
+
