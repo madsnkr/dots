@@ -21,10 +21,12 @@ set $menu fuzzel
 
 set $browser zen
 
+set $bgloc "${XDG_DATA_HOME:-$HOME/.local/share}/bg"
+
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg ~/Pictures/wallpapers/neon_skull.png fill
+output * bg $bgloc fill
 #
 # Example configuration:
 #
