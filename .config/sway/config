@@ -38,6 +38,9 @@ output * bg $bgloc fill
 # This lets D-Bus-activated services (mako, xdg-desktop-portal) reach the display.
 exec dbus-update-activation-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
 
+# Polkit authentication agent: shows password prompts for GUI apps needing root (e.g. firewall-config).
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+
 ### Idle configuration
 #
 # Example configuration:
