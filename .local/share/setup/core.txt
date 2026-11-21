@@ -87,6 +87,7 @@ less
 unzip
 zip
 wget
+zoxide
 
 # Bluetooth
 bluez-runit
